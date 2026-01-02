@@ -1,7 +1,5 @@
-# flux_on/project/main.py
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pathlib import Path
 import streamlit as st
 import logging
@@ -10,18 +8,30 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Adiciona o diretório raiz ao path (ajuste conforme sua estrutura)
-sys.path.append(str(Path(__file__).parent.parent))
+# ADICIONE ESTAS LINHAS - Correção dos paths
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir) if "project" in current_dir else current_dir
+sys.path.insert(0, project_root)
+sys.path.insert(0, current_dir)
 
 try:
-    from project.quantum.optimizer import QuantumTrader
+    # TENTE PRIMEIRO: Importar diretamente (estrutura atual)
+    try:
+        from quantum.optimizer import QuantumTrader
+    except ImportError:
+        # TENTE SEGUNDO: Importar com caminho relativo
+        from .quantum.optimizer import QuantumTrader
+        
     from modules.initial_trades import InitialTradesModule
     from modules.multi_trades import MultiTradesModule
     from modules.dynamic_trading import DynamicTradingModule
     from config import TradePortfolio, TradeType, QuantumTrade
     from utils import safe_divide
+    
 except ImportError as e:
     logger.error(f"Erro de importação: {e}")
+    logger.error(f"sys.path: {sys.path}")
+    logger.error(f"current_dir: {current_dir}")
     raise
 
 class TradingSystem:
