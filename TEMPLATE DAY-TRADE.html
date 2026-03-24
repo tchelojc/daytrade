@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>📘 QUANTUM ESCALA · Tutorial Day Trade (Demonstração Estática)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --quantum-green: #0c2518;
+            --quantum-dark: #1a2b2a;
+            --quantum-light: #253a3a;
+            --accent-primary: #00ff88;
+            --accent-secondary: #4edd9d;
+            --accent-success: #00cc66;
+            --accent-warning: #ffaa00;
+            --accent-danger: #ff375f;
+            --accent-safe: #4d79ff;
+            --panel-bg: rgba(20, 40, 35, 0.95);
+            --panel-border: rgba(0, 255, 136, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #bbfbd6;
+            --text-muted: #90aea4;
+            --gradient-safe: linear-gradient(135deg, #00ff88, #4d79ff);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--quantum-green), var(--quantum-dark), var(--quantum-light));
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* HEADER DEMO */
+        .demo-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(0, 20, 10, 0.9);
+            border-radius: 28px;
+            border: 2px solid var(--accent-success);
+            backdrop-filter: blur(8px);
+        }
+
+        .quantum-title {
+            font-size: 2.2rem;
+            background: var(--gradient-safe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .demo-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffcc44;
+            border-radius: 40px;
+            padding: 6px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            color: #ffecb3;
+        }
+
+        .status-quantum {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+            background: rgba(0, 30, 20, 0.5);
+            border-radius: 20px;
+            padding: 15px;
+        }
+
+        .status-item-quantum {
+            background: rgba(30, 46, 40, 0.8);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .status-label-quantum {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .status-value-quantum {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        /* NAVEGAÇÃO PRINCIPAL */
+        .quantum-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 25px 0 20px;
+        }
+
+        .nav-btn-quantum {
+            padding: 12px;
+            border: none;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-btn-quantum.active {
+            border: 1px solid var(--accent-primary);
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* CARDS E PAINEIS */
+        .quantum-panel {
+            background: var(--panel-bg);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(6px);
+            margin-bottom: 25px;
+        }
+
+        .panel-title-quantum {
+            font-size: 1.4rem;
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent-primary);
+            padding-left: 14px;
+        }
+
+        .grid-2cols {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card-demo {
+            background: rgba(30, 46, 40, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(0,255,136,0.2);
+        }
+
+        .etapa-step {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 25px;
+            align-items: flex-start;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 18px;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .step-number {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-safe);
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+
+        .demo-message-area {
+            background: rgba(0, 30, 20, 0.6);
+            border-radius: 16px;
+            padding: 14px;
+            margin-top: 15px;
+            border-left: 4px solid var(--accent-warning);
+            font-size: 0.9rem;
+        }
+
+        .badge-info {
+            background: rgba(77, 121, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+
+        /* Estilos para barras de distribuição (estagnadas) */
+        .distribuicao-barra {
+            margin-bottom: 18px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 10px;
+        }
+        .barra-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 5px;
+            font-size: 0.85rem;
+        }
+        .barra-nome {
+            font-weight: 700;
+            color: #bbdefb;
+        }
+        .barra-valor {
+            font-weight: 700;
+            color: #4fc3f7;
+        }
+        .barra-percent {
+            font-weight: 700;
+            color: #2ecc71;
+        }
+        .barra-container {
+            height: 28px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .barra-preenchimento {
+            height: 100%;
+            border-radius: 8px;
+            transition: none; /* estático */
+            background: var(--gradient-safe);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .barra-texto {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px black;
+            font-size: 0.75rem;
+        }
+
+        /* Estilos para cenários */
+        .cenario-categoria {
+            margin-bottom: 30px;
+            border-left: 4px solid;
+            padding-left: 16px;
+        }
+        .cenario-categoria.alta { border-left-color: #2ecc71; }
+        .cenario-categoria.baixa { border-left-color: #e74c3c; }
+        .cenario-categoria.hedge { border-left-color: #f1c40f; }
+
+        .cenario-lista {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .cenario-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .cenario-nome {
+            flex: 1;
+            color: #bbdefb;
+        }
+
+        .cenario-valor {
+            font-weight: 700;
+            color: #ff9800;
+            margin-left: 15px;
+        }
+
+        .categoria-total {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 8px 0 15px 0;
+            display: inline-block;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .categoria-titulo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 15px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 40px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 700px) {
+            .quantum-nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="demo-header">
+        <h1 class="quantum-title">⚡ QUANTUM ESCALA · Day Trade</h1>
+        <p class="quantum-subtitle">Demonstração do fluxo de operações – dados fictícios (modo tutorial)</p>
+        <div class="demo-badge">🎓 APENAS DEMONSTRAÇÃO · NENHUMA OPERAÇÃO REAL</div>
+
+        <!-- status ilustrativos (fixos) -->
+        <div class="status-quantum">
+            <div class="status-item-quantum"><div class="status-label-quantum">CAPITAL DEMO</div><div class="status-value-quantum">R$ 1.500</div></div>
+            <div class="status-item-quantum"><div class="status-label-quantum">RISCO POR OPERAÇÃO</div><div class="status-value-quantum">1.2%</div></div>
+            <div class="status-item-quantum"><div class="status-label-quantum">META DIÁRIA</div><div class="status-value-quantum">2.5%</div></div>
+            <div class="status-item-quantum"><div class="status-label-quantum">ATIVOS NO PORTFÓLIO</div><div class="status-value-quantum">5</div></div>
+        </div>
+    </div>
+
+    <!-- Navegação principal -->
+    <div class="quantum-nav">
+        <button class="nav-btn-quantum active" data-tab="setup"><span>⚙️</span> 1. Configuração</button>
+        <button class="nav-btn-quantum" data-tab="fluxo"><span>📋</span> 2. Fluxo da Operação</button>
+        <button class="nav-btn-quantum" data-tab="mecanismo"><span>⚖️</span> 3. Mecanismo Quantum</button>
+        <button class="nav-btn-quantum" data-tab="analise"><span>📊</span> 4. Análise & Prompts</button>
+    </div>
+
+    <!-- ================= ABA 1: CONFIGURAÇÃO ================= -->
+    <div id="setup" class="tab-content active">
+        <div class="quantum-panel">
+            <h2 class="panel-title-quantum">📌 Etapa 1: Definição dos Parâmetros (exemplo fixo)</h2>
+            <div class="grid-2cols">
+                <div class="card-demo">
+                    <h3 style="color: var(--accent-primary);">📊 Configuração de Exemplo</h3>
+                    <p><strong>💰 Capital Total:</strong> R$ 1.500 (fictício)</p>
+                    <p><strong>🎯 Meta Diária:</strong> 2.5%</p>
+                    <p><strong>⚠️ Risco por operação:</strong> 1.2%</p>
+                    <div class="demo-message-area">
+                        💡 No sistema real, esses parâmetros definem o tamanho das operações e stops. Aqui são apenas ilustrativos.
+                    </div>
+                </div>
+                <div class="card-demo">
+                    <h3 style="color: var(--accent-primary);">📊 Cesta de Ativos (exemplo)</h3>
+                    <ul style="margin-top: 12px; list-style: none;">
+                        <li>🔹 WIN (Mini Índice) – Correlação negativa com dólar</li>
+                        <li>🔹 WDO (Mini Dólar) – Hedge natural</li>
+                        <li>🔹 PETR4 (Petróleo) – Commodity volátil</li>
+                        <li>🔹 Ouro (GOLD) – Ativo refúgio</li>
+                        <li>🔹 Bitcoin – Alta volatilidade, diversificação</li>
+                    </ul>
+                    <div class="demo-message-area" style="margin-top: 18px;">
+                        ✅ No Quantum Escala, os ativos são escolhidos para ter correlação negativa, reduzindo o risco do portfólio.
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOVO: Distribuição de Capital em Barras Estagnadas -->
+            <div class="quantum-panel" style="margin-top: 25px;">
+                <h2 class="panel-title-quantum">📊 Distribuição de Capital (exemplo fixo)</h2>
+                <div id="distribuicaoBarras"></div>
+                <div class="demo-message-area">
+                    📌 A alocação exemplificada busca equilíbrio entre risco e proteção. Os valores são fixos para demonstração.
+                </div>
+            </div>
+
+            <!-- Painel de Cenários de Mercado (estáticos) -->
+            <div class="quantum-panel" style="margin-top: 25px;">
+                <h2 class="panel-title-quantum">🎯 Cenários de Mercado por Resultado</h2>
+                <div id="cenariosMercado"></div>
+                <div class="demo-message-area">
+                    📊 Os retornos são calculados com base na distribuição de capital exemplificada (R$ 1.500). Cada cenário representa uma variação percentual dos ativos.
+                </div>
+            </div>
+
+            <div class="demo-message-area" style="margin-top: 20px;">
+                🧠 <strong>Como funciona:</strong> O sistema divide o capital entre os ativos, aplica stops dinâmicos e gerencia a escala automaticamente.
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ABA 2: FLUXO DA OPERAÇÃO ================= -->
+    <div id="fluxo" class="tab-content">
+        <div class="quantum-panel">
+            <h2 class="panel-title-quantum">📋 Etapa 2: Sequência Completa de um Day Trade</h2>
+            <div class="grid-2cols">
+                <div>
+                    <div class="etapa-step">
+                        <div class="step-number">1</div>
+                        <div><strong>Análise Técnica / Pré-mercado</strong><br>Identificação de suportes, resistências e tendência. Exemplo: WIN rompeu resistência de 128.000 pontos.</div>
+                    </div>
+                    <div class="etapa-step">
+                        <div class="step-number">2</div>
+                        <div><strong>Definição de Entrada, Stop e Alvo</strong><br>Baseado em ATR e suporte/resistência. Ex: Entrada R$ 128.200, Stop R$ 127.800 (0.3%), Alvo R$ 129.400 (0.9%).</div>
+                    </div>
+                    <div class="etapa-step">
+                        <div class="step-number">3</div>
+                        <div><strong>Alocação de Capital & Execução</strong><br>Capital definido (R$ 1.500). Quantidade = (capital * risco%) / distância stop. Exemplo: R$ 1500 * 1.2% = R$ 18 de risco / (R$ 0,40) = 45 contratos (mini índice).</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="etapa-step">
+                        <div class="step-number">4</div>
+                        <div><strong>Gerenciamento de Risco (Trailing Stop)</strong><br>Após lucro de 0.5%, stop móvel protege ganhos. Sistema Quantum ajusta proteção automaticamente.</div>
+                    </div>
+                    <div class="etapa-step">
+                        <div class="step-number">5</div>
+                        <div><strong>Saída / Encerramento</strong><br>Ao atingir alvo ou stop, operação encerrada. Registro de resultado e ajuste de escala.</div>
+                    </div>
+                    <div class="etapa-step">
+                        <div class="step-number">6</div>
+                        <div><strong>Revisão & Ajuste de Parâmetros</strong><br>Análise de win rate e eficiência; recalibração dos filtros JUBILO e GRATIDÃO.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-message-area" style="margin-top: 10px;">
+                🎯 <strong>Exemplo de operação:</strong> Ordem de COMPRA executada no Mini Índice. Risco calculado: R$ 18,00. Stop a 0.4% abaixo, alvo 1.0%. Operação encerrada com lucro fictício de R$ 32,40. Gerenciamento: escala ajustada para 1.2x.
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ABA 3: MECANISMO QUANTUM ================= -->
+    <div id="mecanismo" class="tab-content">
+        <div class="quantum-panel">
+            <h2 class="panel-title-quantum">⚖️ Mecanismo de Contra‑Balanceamento & Escala</h2>
+            <div class="grid-2cols">
+                <div>
+                    <h3 style="color: var(--accent-primary);">🔄 Como funciona a "gangorra"</h3>
+                    <p style="margin-top: 8px;">Quando um ativo (ex: Mini Índice) cai, o sistema automaticamente aumenta posição em ativo com correlação negativa (ex: Dólar), reduzindo perda líquida.</p>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; margin: 18px 0;">
+                        <strong>Fórmula de proteção:</strong><br>
+                        <code style="font-family: monospace;">Proteção = PerdaAtual × GRATIDÃO (1.80) × (1 + NívelEscala)</code>
+                    </div>
+                    <div class="demo-message-area">
+                        📘 Exemplo: Perda de R$ 50 → proteção ativada: 50 × 1.8 × (1+2) = R$ 270 de hedge aplicado em ativo correlacionado, compensando 80% da perda.
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: var(--accent-primary);">📈 Níveis de Escala Dinâmica</h3>
+                    <ul style="margin-top: 12px;">
+                        <li><span style="color:#00ff88;">Nível 1</span> – 1x (entrada base)</li>
+                        <li><span style="color:#ffaa00;">Nível 2</span> – 1.5x (lucro acumulado > 1%)</li>
+                        <li><span style="color:#ffaa66;">Nível 3</span> – 2.2x (tendência confirmada)</li>
+                        <li><span style="color:#ff8844;">Nível 4</span> – 3.3x (proteção máxima acionada)</li>
+                        <li><span style="color:#ff5555;">Nível 5</span> – 5x (momento de alta eficiência)</li>
+                    </ul>
+                    <div class="demo-message-area" style="margin-top: 18px;">
+                        🧠 <strong>Filtro de Ganância (JUBILO = 0.54):</strong> trava a escala para evitar over-trading quando lucros são excessivos.
+                    </div>
+                </div>
+            </div>
+            <div class="demo-message-area" style="margin-top: 20px;">
+                🔮 <strong>Teste de cenário (exemplo):</strong> 
+                <span>📉 Queda de 2% no Índice → Ativo B (Dólar) sobe 1.6%. Proteção acionada: perda líquida reduzida em 78% (de R$30 para R$6,60). Escala reduzida para 0.8x temporariamente.</span><br>
+                <span>📈 Alta de 1.8% no Dólar → Sistema aumenta escala para 1.5x, realiza lucro parcial de 30%. Proteção nos demais ativos reforçada. Resultado líquido +1.2% sobre capital.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ABA 4: ANÁLISE & PROMPTS IA ================= -->
+    <div id="analise" class="tab-content">
+        <div class="quantum-panel">
+            <h2 class="panel-title-quantum">📊 Análise de Performance & Prompts Educativos</h2>
+            <div class="grid-2cols">
+                <div>
+                    <div class="card-demo">
+                        <h3>📈 Métricas Ilustrativas</h3>
+                        <p>Win Rate (demo): 72%<br>Sharpe Ratio: 2.1<br>Drawdown Máx: 1.5%<br>Expectativa por operação: +0.42%</p>
+                        <div class="demo-message-area">
+                            🔍 Esses números são exemplos baseados em backtests com dados históricos (fictícios). A eficiência real depende da execução e do gerenciamento.
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card-demo">
+                        <h3>🤖 Prompt para IA (exemplo)</h3>
+                        <div style="background: #0a1f1c; border-radius: 12px; padding: 12px; font-family: monospace; font-size: 0.8rem;">
+                            "Atue como especialista em trading quantitativo. Analise o sistema Quantum Escala: capital R$ 1.500, 5 ativos com correlação negativa, stop médio 0.9%, alvo 1.8%. Sugira otimizações nos parâmetros JUBILO e GRATIDÃO para aumentar a eficiência."
+                        </div>
+                        <div class="demo-message-area" style="margin-top: 12px;">
+                            📋 Prompt copiado? Selecione o texto e copie manualmente (demo estática).
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-message-area" style="margin-top: 20px;">
+                💡 <strong>Dica:</strong> Use os prompts acima em ChatGPT, Claude ou Gemini para receber análises personalizadas sobre estratégias de day trade e gestão de risco.
+            </div>
+            <div class="demo-message-area" style="margin-top: 20px;">
+                📄 <strong>Relatório de simulação (demo):</strong> Capital simulado: R$ 1.500 | Meta diária: 2.5% | Risco: 1.2% | Eficiência (simulada): 87% | Win rate: 72% | Recomendação: manter stops ajustados por ATR e revisar correlação semanalmente.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        ⚡ QUANTUM ESCALA – Versão demonstrativa educacional. Nenhum dado real é processado. Interface criada para ensinar o fluxo de day trade multi-ativos.
+    </footer>
+</div>
+
+<script>
+    // ========== DADOS ESTÁTICOS DOS ATIVOS E ALOCAÇÕES ==========
+    const assets = [
+        { nome: "WIN (Mini Índice)", alocacao: 500 },
+        { nome: "WDO (Mini Dólar)", alocacao: 350 },
+        { nome: "PETR4 (Petróleo)", alocacao: 300 },
+        { nome: "Ouro (GOLD)", alocacao: 200 },
+        { nome: "Bitcoin", alocacao: 150 }
+    ];
+    const capitalTotal = 1500;
+
+    // Renderizar barras de distribuição estáticas
+    function renderizarBarrasDistribuicao() {
+        const container = document.getElementById('distribuicaoBarras');
+        if (!container) return;
+        let html = '';
+        for (let ativo of assets) {
+            const percentual = (ativo.alocacao / capitalTotal) * 100;
+            html += `
+                <div class="distribuicao-barra">
+                    <div class="barra-header">
+                        <div class="barra-nome">${ativo.nome}</div>
+                        <div class="barra-info">
+                            <span class="barra-valor">R$ ${ativo.alocacao.toFixed(2)}</span>
+                            <span class="barra-percent">${percentual.toFixed(1)}%</span>
+                        </div>
+                    </div>
+                    <div class="barra-container">
+                        <div class="barra-preenchimento" style="width: ${percentual}%">
+                            <div class="barra-texto">${percentual.toFixed(1)}% (R$ ${ativo.alocacao.toFixed(2)})</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // ========== CENÁRIOS DE MERCADO ==========
+    const scenarios = {
+        alta: {
+            title: "📈 CENÁRIOS DE ALTA",
+            scenarios: [
+                { nome: "Índice sobe 1% / Dólar cai 0.5% / Petróleo sobe 2% / Ouro estável / Bitcoin sobe 3%", 
+                  mov: { "WIN (Mini Índice)": 1.0, "WDO (Mini Dólar)": -0.5, "PETR4 (Petróleo)": 2.0, "Ouro (GOLD)": 0, "Bitcoin": 3.0 } },
+                { nome: "Índice sobe 1.5% / Dólar cai 0.8% / Petróleo sobe 1% / Ouro sobe 0.5% / Bitcoin sobe 2%", 
+                  mov: { "WIN (Mini Índice)": 1.5, "WDO (Mini Dólar)": -0.8, "PETR4 (Petróleo)": 1.0, "Ouro (GOLD)": 0.5, "Bitcoin": 2.0 } },
+                { nome: "Índice sobe 2% / Dólar cai 1% / Petróleo sobe 3% / Ouro sobe 1% / Bitcoin sobe 5%", 
+                  mov: { "WIN (Mini Índice)": 2.0, "WDO (Mini Dólar)": -1.0, "PETR4 (Petróleo)": 3.0, "Ouro (GOLD)": 1.0, "Bitcoin": 5.0 } }
+            ]
+        },
+        baixa: {
+            title: "📉 CENÁRIOS DE QUEDA",
+            scenarios: [
+                { nome: "Índice cai 1% / Dólar sobe 0.5% / Petróleo cai 1.5% / Ouro cai 0.5% / Bitcoin cai 2%", 
+                  mov: { "WIN (Mini Índice)": -1.0, "WDO (Mini Dólar)": 0.5, "PETR4 (Petróleo)": -1.5, "Ouro (GOLD)": -0.5, "Bitcoin": -2.0 } },
+                { nome: "Índice cai 1.2% / Dólar sobe 0.7% / Petróleo cai 2% / Ouro cai 1% / Bitcoin cai 3%", 
+                  mov: { "WIN (Mini Índice)": -1.2, "WDO (Mini Dólar)": 0.7, "PETR4 (Petróleo)": -2.0, "Ouro (GOLD)": -1.0, "Bitcoin": -3.0 } },
+                { nome: "Índice cai 2% / Dólar sobe 1% / Petróleo cai 3% / Ouro cai 1.5% / Bitcoin cai 5%", 
+                  mov: { "WIN (Mini Índice)": -2.0, "WDO (Mini Dólar)": 1.0, "PETR4 (Petróleo)": -3.0, "Ouro (GOLD)": -1.5, "Bitcoin": -5.0 } }
+            ]
+        },
+        hedge: {
+            title: "🛡️ CENÁRIOS DE HEDGE / ESTABILIDADE",
+            scenarios: [
+                { nome: "Índice estável / Dólar estável / Petróleo sobe 1% / Ouro sobe 0.5% / Bitcoin sobe 1%", 
+                  mov: { "WIN (Mini Índice)": 0, "WDO (Mini Dólar)": 0, "PETR4 (Petróleo)": 1.0, "Ouro (GOLD)": 0.5, "Bitcoin": 1.0 } },
+                { nome: "Índice sobe 0.5% / Dólar cai 0.3% / Petróleo cai 0.5% / Ouro sobe 1% / Bitcoin cai 0.5%", 
+                  mov: { "WIN (Mini Índice)": 0.5, "WDO (Mini Dólar)": -0.3, "PETR4 (Petróleo)": -0.5, "Ouro (GOLD)": 1.0, "Bitcoin": -0.5 } },
+                { nome: "Índice cai 0.3% / Dólar sobe 0.2% / Petróleo sobe 0.8% / Ouro estável / Bitcoin sobe 1.2%", 
+                  mov: { "WIN (Mini Índice)": -0.3, "WDO (Mini Dólar)": 0.2, "PETR4 (Petróleo)": 0.8, "Ouro (GOLD)": 0, "Bitcoin": 1.2 } }
+            ]
+        }
+    };
+
+    function calcularRetornoCenario(movimentos) {
+        let valorFinal = 0;
+        for (let ativo of assets) {
+            let variacao = movimentos[ativo.nome] || 0;
+            let valorApos = ativo.alocacao * (1 + variacao / 100);
+            valorFinal += valorApos;
+        }
+        return valorFinal;
+    }
+
+    function renderizarCenarios() {
+        const container = document.getElementById('cenariosMercado');
+        if (!container) return;
+        let html = '';
+        for (let [catKey, catData] of Object.entries(scenarios)) {
+            let totalCategoria = 0;
+            let scenariosHtml = '';
+            for (let scenario of catData.scenarios) {
+                const retorno = calcularRetornoCenario(scenario.mov);
+                totalCategoria += retorno;
+                const lucro = retorno - capitalTotal;
+                const sinal = lucro >= 0 ? '+' : '';
+                scenariosHtml += `
+                    <div class="cenario-item">
+                        <span class="cenario-nome">${scenario.nome}</span>
+                        <span class="cenario-valor">R$ ${retorno.toFixed(2)} (${sinal}${lucro.toFixed(2)})</span>
+                    </div>
+                `;
+            }
+            html += `
+                <div class="cenario-categoria ${catKey}">
+                    <div class="categoria-titulo">${catData.title}</div>
+                    <div class="categoria-total">Total da categoria: R$ ${totalCategoria.toFixed(2)}</div>
+                    <div class="cenario-lista">
+                        ${scenariosHtml}
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    // ========== CONTROLE DE ABAS (somente visual) ==========
+    document.querySelectorAll('.nav-btn-quantum').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            document.querySelectorAll('.nav-btn-quantum').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // Inicializa a página
+    renderizarBarrasDistribuicao();
+    renderizarCenarios();
+</script>
+</body>
+</html>
